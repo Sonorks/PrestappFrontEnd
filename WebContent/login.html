@@ -1,0 +1,32 @@
+<button onclick="document.getElementById('modalLogin').style.display='block'">Login</button>
+
+<div id="modalLogin" class="modal"><center>
+	<span onclick="document.getElementById('modalLogin').style.display='none'" 
+		class="close" title="Cerrar">&times;</span>
+
+	<form class="modal-content animate w3-teal" >
+		<div class="w3-container" style="width: 60%; background-color:white" >
+			<br/>
+			<div style="width: 50%">
+				<input class="w3-animate-input" type="text" 
+					placeholder="Usuario"
+					required id="usuario"
+					ng-model="usuario"
+					required/>
+			</div>
+			<br/>
+			<div style="width: 50%">
+				<input class="w3-animate-input" type="password" 
+					placeholder="contrasena"
+					required id="contrasena"
+					ng-model="contrasena"
+					required/>
+			</div>
+			<br/> 
+			<div>
+				<center><button class="w3-btn w3-teal" ng-click="logear()" type="submit">Ingresar</button></center>
+			</div>
+			</br>
+		</div>
+	</form>
+</center></div>
