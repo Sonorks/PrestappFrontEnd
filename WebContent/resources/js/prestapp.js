@@ -47,6 +47,20 @@ prestapp.controller("nuevoPrestamo", function ($scope, $location, $cookies){
 	
 })
 
+prestapp.controller("navBarController", function ($scope, $location, $cookies){
+	$scope.openLogin = function(){
+		$location.url('/');
+	}
+	$scope.openPrestamo = function(){
+		$location.url('/nuevoPrestamo');
+	}
+	$scope.openDevolucion = function(){
+		$location.url('/nuevoPrestamo');
+	}
+	$scope.openSanciones = function(){
+		$location.url('/nuevoPrestamo');
+	}
+})
 
 prestapp.config(['$routeProvider', function($routeProvider){
 	$routeProvider.when('/',{
@@ -58,3 +72,11 @@ prestapp.config(['$routeProvider', function($routeProvider){
 		controller: 'nuevoPrestamo'
 	})
 }])
+
+prestapp.directive('header', function(){
+		return{
+			restrict: 'E',
+			templateUrl: 'header.html',
+			controller: 'navBarController'
+		};
+	});
