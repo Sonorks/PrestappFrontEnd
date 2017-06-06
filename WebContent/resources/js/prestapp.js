@@ -24,6 +24,25 @@ prestapp.service('loginService', function($http, $cookies, $location){
 	}
 });
 
+prestapp.service('objetoService', function($http, $cookies, $location){
+	this.obtenerObjetosDisponibles = function(){
+		return $http({
+			url: 'http://localhost:8081/PrestappWS/prestapp/objeto/disponibles',
+			method: 'GET'
+		});
+	}
+
+	this.realizarPrestamo = function(username, idObjeto){
+		return $http({
+			url:  'http://localhost:8081/PrestappWS/prestapp/prestamo/realizarPrestamo',
+			method: 'POST',
+			params: {
+				usuario: username,
+				id: idObjeto
+			}
+		}); 	
+	}
+});
 
 prestapp.controller("login", function($scope, $location, $cookies, loginService){
 	$scope.usuario = '';
@@ -43,8 +62,27 @@ prestapp.controller("login", function($scope, $location, $cookies, loginService)
 	}
 })
 
-prestapp.controller("nuevoPrestamo", function ($scope, $location, $cookies){
-	
+prestapp.controller("nuevoPrestamo", function ($scope, $location, $cookies, objetoService){
+	objetoService.obtenerObjetosDisponibles().then(
+			function success(data){
+				$scope.objetos = data.data;
+				console.log(data.data);
+			}
+			);
+	$scope.realizarPrestamo = function(){
+		objetoService.realizarPrestamo($scope.username, $scope.idObjeto).then(
+			function success(data){
+				console.log("consumido el servicio de realizar prestamo");
+				if(data.data == 'listo'){
+					$scope.username = '';
+					$scope.idObjeto = '';
+					$location.url('/nuevoPrestamo');		
+				}
+				else{
+					alert("No se pudo realizar el prestamo: "+ data.data);
+				}
+			})
+	}
 })
 
 prestapp.controller("navBarController", function ($scope, $location, $cookies){
