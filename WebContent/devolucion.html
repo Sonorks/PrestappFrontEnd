@@ -1,0 +1,32 @@
+<center><div>
+<div name="divDevolucion">
+			<h2><center>DEVOLVER UN OBJETO</center></h2>
+			<form name="formAgregarPregunta" ng-submit="realizarPrestamo()">
+				<input placeholder="Usuario Administrador" ng-model="username"></input> <br/>
+				<input placeholder="id Objeto" ng-model="idObjeto"></input> <br/>
+				<input placeholder="id Usuario" ng-model="idUsuario"></input> <br/>
+				<br/>
+				<input type="submit" value="Realizar Devolucion"></button>
+			</form>
+		</div>
+		<div name="divEliminarPregunta">
+			<center><h2>OBJETOS PRESTADOS</h2>
+			<center><button class="w3-btn w3-julian" name="cargarPreguntas" ng-click="cargarPreguntas()">Cargar objetos</button></center>
+			<br/>
+			<center><table style="width:70%" class="w3-table w3-centered w3-bordered">
+				<thead>
+			      <tr>
+			        <th><center>ID</center></th>
+			        <th><center>NOMBRE</center></th>
+			      </tr>
+			    </thead>
+			    <tbody>
+					<tr style="width:80%"  ng-repeat="objeto in objetos | filter:searchText">
+						<td><center>{{objeto.id}}</center></td>
+						<td><center>{{objeto.nombre}}</center></td>
+					</tr>
+				</tbody>
+			</table></center>
+		</div>
+
+</div></center>>
