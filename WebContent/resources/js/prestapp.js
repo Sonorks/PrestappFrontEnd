@@ -85,6 +85,30 @@ prestapp.controller("nuevoPrestamo", function ($scope, $location, $cookies, obje
 	}
 })
 
+prestapp.controller("devolucion", function ($scope, $location, $cookies, objetoService){
+	objetoService.obtenerObjetosDisponibles().then(
+			function success(data){
+				$scope.objetos = data.data;
+				console.log(data.data);
+			}
+			);
+	$scope.realizarDevolucion = function(){
+		objetoService.realizarDevolucion($scope.username, $scope.idObjeto).then(
+			function success(data){
+				console.log("consumido el servicio de realizar devolucion");
+				if(data.data == 'listo'){
+					$scope.username = '';
+					$scope.idObjeto = '';
+					$scope.idUsuario = '';
+					$location.url('/devolucion');		
+				}
+				else{
+					alert("No se pudo realizar la devolucion: "+ data.data);
+				}
+			})
+	}
+})
+
 prestapp.controller("navBarController", function ($scope, $location, $cookies){
 	$scope.openLogin = function(){
 		$location.url('/');
@@ -93,7 +117,7 @@ prestapp.controller("navBarController", function ($scope, $location, $cookies){
 		$location.url('/nuevoPrestamo');
 	}
 	$scope.openDevolucion = function(){
-		$location.url('/nuevoPrestamo');
+		$location.url('/devolucion');
 	}
 	$scope.openSanciones = function(){
 		$location.url('/nuevoPrestamo');
@@ -108,6 +132,10 @@ prestapp.config(['$routeProvider', function($routeProvider){
 	$routeProvider.when('/nuevoPrestamo',{
 		templateUrl: 'nuevoPrestamo.html',
 		controller: 'nuevoPrestamo'
+	})
+	$routeProvider.when('/devolucion',{
+		templateUrl: 'devolucion.html',
+		controller: 'devolucion'
 	})
 }])
 
