@@ -24,6 +24,29 @@ prestapp.service('loginService', function($http, $cookies, $location){
 	}
 });
 
+prestapp.service('devolucionService', function($http, $cookies, $location){
+	this.realizarDevolucion = function(userAdmin, idObjeto, idUsuario){
+		return $http({
+			url:'http://localhost:8081/PrestappWS/prestapp/prestamo/realizarDevolucion',
+			method:'POST',
+			params: {
+				admin: userAdmin,
+				idObjeto: idObjeto,
+				idUsuario: idUsuario
+			}
+		});	
+	}
+});
+
+prestapp.service('prestamoService', function($http, $cookies, $location){
+	this.obtenerPrestamos = function(){
+		return $http({
+			url: 'http://localhost:8081/PrestappWS/prestapp/prestamo/obtenerPrestamos',
+			method: 'GET'
+		});
+	}
+});
+
 prestapp.service('objetoService', function($http, $cookies, $location){
 	this.obtenerObjetosDisponibles = function(){
 		return $http({
@@ -85,19 +108,19 @@ prestapp.controller("nuevoPrestamo", function ($scope, $location, $cookies, obje
 	}
 })
 
-prestapp.controller("devolucion", function ($scope, $location, $cookies, objetoService){
-	objetoService.obtenerObjetosDisponibles().then(
+prestapp.controller("devolucion", function ($scope, $location, $cookies, devolucionService, prestamoService){
+	prestamoService.obtenerPrestamos().then(
 			function success(data){
-				$scope.objetos = data.data;
+				$scope.prestamos = data.data;
 				console.log(data.data);
 			}
 			);
 	$scope.realizarDevolucion = function(){
-		objetoService.realizarDevolucion($scope.username, $scope.idObjeto).then(
+		devolucionService.realizarDevolucion($scope.userAdmin, $scope.idObjeto, $scope.idUsuario).then(
 			function success(data){
 				console.log("consumido el servicio de realizar devolucion");
-				if(data.data == 'listo'){
-					$scope.username = '';
+				if(data.data === 'listo'){
+					$scope.userAdmin = '';
 					$scope.idObjeto = '';
 					$scope.idUsuario = '';
 					$location.url('/devolucion');		
