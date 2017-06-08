@@ -1,12 +1,13 @@
 <br/><br/></br>
-<center><button class= "w3-btn" onclick="document.getElementById('modalLogin').style.display='block'">Login</button></center>
-
+<center><button class= "w3-btn w3-julian" ng-if="!logoutVisible" onclick="document.getElementById('modalLogin').style.display='block'">Login</button></center>
+<center><button class= "w3-btn w3-julian" ng-if="logoutVisible" ng-click="logout()">Logout</button></center>
+<center><h2>{{loginInfo}}</h2></center>
 <div id="modalLogin" class="modal"><center>
 	<span onclick="document.getElementById('modalLogin').style.display='none'" 
 		class="close" title="Cerrar">&times;</span>
 
-	<form class="modal-content animate w3-teal" >
-		<div class="w3-container" style="width: 60%; background-color:white" >
+	<form class="modal-content animate w3-julian" >
+		<div  style="width: 60%; background-color:white" >
 			<br/>
 			<div style="width: 50%">
 				<input class="w3-animate-input" type="text" 
@@ -25,9 +26,10 @@
 			</div>
 			<br/> 
 			<div>
-				<center><button class="w3-btn w3-teal" ng-click="logear()" type="submit">Ingresar</button></center>
+				<center><button class="w3-btn w3-julian" ng-click="logear()" type="submit">Ingresar</button></center>
 			</div>
 			</br>
 		</div>
 	</form>
 </center></div>
+<footer></footer>

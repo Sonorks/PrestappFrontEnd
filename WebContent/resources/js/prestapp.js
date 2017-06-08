@@ -18,6 +18,7 @@ prestapp.service('loginService', function($http, $cookies, $location){
 	this.validarEstado = function(){
 		if(typeof($cookies.usuario) == 'undefined' ||
 				$cookies.usuario == ""){
+			alert("Debes estar logeado para usar la aplicacion");
 			$location.url("/");
 			return false;
 		}
@@ -45,6 +46,12 @@ prestapp.service('prestamoService', function($http, $cookies, $location){
 			method: 'GET'
 		});
 	}
+	this.eliminarPrestamo = function(idObjeto, usuario){
+		return $http({
+			url: 'http://localhost:8081/PrestappWS/prestapp/prestamo/eliminarPrestamo',
+			method: 'DELETE' 
+		});
+	}
 });
 
 prestapp.service('objetoService', function($http, $cookies, $location){
@@ -67,9 +74,18 @@ prestapp.service('objetoService', function($http, $cookies, $location){
 	}
 });
 
-prestapp.controller("login", function($scope, $location, $cookies, loginService){
+prestapp.controller("login", function($scope, $location, $cookies, $route, loginService){
 	$scope.usuario = '';
 	$scope.contrasena = '';
+	console.log($cookies.usuario);
+	if($cookies.usuario == 'undefined' || $cookies.usuario == ""){
+		$scope.loginInfo = "Dale al boton para logearte!";
+		//$scope.loginInfo = $cookies.usuario;
+	}
+	else{
+		$scope.loginInfo = "Ya estas logeado";
+		$scope.logoutVisible = true;
+	}
 	$scope.logear = function(){
 		loginService.logear($scope.usuario, $scope.contrasena).then(
 				function success(data){
@@ -83,9 +99,14 @@ prestapp.controller("login", function($scope, $location, $cookies, loginService)
 					$location.url('/nuevoPrestamo');
 				});
 	}
+	$scope.logout = function(){
+		$cookies.usuario = "";
+		$route.reload();
+		//window.location.reload();
+	}
 })
 
-prestapp.controller("nuevoPrestamo", function ($scope, $location, $cookies, objetoService){
+prestapp.controller("nuevoPrestamo", function ($scope, $location, $cookies, $route, objetoService){
 	objetoService.obtenerObjetosDisponibles().then(
 			function success(data){
 				$scope.objetos = data.data;
@@ -99,14 +120,18 @@ prestapp.controller("nuevoPrestamo", function ($scope, $location, $cookies, obje
 				if(data.data == 'listo'){
 					$scope.username = '';
 					$scope.idObjeto = '';
-					$location.url('/nuevoPrestamo');		
+					$route.reload();		
 				}
 				else{
 					alert("No se pudo realizar el prestamo: "+ data.data);
 				}
 			})
 	}
-})
+});
+
+prestapp.controller("sancionesController", function(){
+
+});
 
 prestapp.controller("devolucion", function ($scope, $location, $cookies, devolucionService, prestamoService){
 	prestamoService.obtenerPrestamos().then(
@@ -143,9 +168,14 @@ prestapp.controller("navBarController", function ($scope, $location, $cookies){
 		$location.url('/devolucion');
 	}
 	$scope.openSanciones = function(){
-		$location.url('/nuevoPrestamo');
+		$location.url('/sanciones');
 	}
 })
+prestapp.run(function($rootScope, $location, loginService){
+	$rootScope.$on('$routeChangeStart', function(){
+		loginService.validarEstado();
+	})
+});
 
 prestapp.config(['$routeProvider', function($routeProvider){
 	$routeProvider.when('/',{
@@ -160,6 +190,10 @@ prestapp.config(['$routeProvider', function($routeProvider){
 		templateUrl: 'devolucion.html',
 		controller: 'devolucion'
 	})
+	$routeProvider.when('/sanciones',{
+		templateUrl: 'sanciones.html',
+		controller: 'sancionesController'
+	})
 }])
 
 prestapp.directive('header', function(){
@@ -169,3 +203,9 @@ prestapp.directive('header', function(){
 			controller: 'navBarController'
 		};
 	});
+prestapp.directive('footer', function(){
+	return{
+		restrict: 'E',
+		templateUrl: 'footer.html'
+	}
+})

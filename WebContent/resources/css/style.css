@@ -86,7 +86,7 @@ body {
   background:#ffffff; /*From http://flatuicolors.com/ */
 }
 
-form {
+.form2 {
   position:relative;
   width: 50%;
   height: auto;
@@ -154,4 +154,24 @@ input:focus {
   font-size: 25px;
   margin-top: 10px;
   text-align: right;
+}
+
+.footer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  background-color: #efefef;
+  text-align: center;
+}
+
+.navbar .navbar-nav {
+  display: inline-block;
+  float: none;
+  vertical-align: top;
+}
+
+.navbar .navbar-collapse {
+  text-align: center;
 }
